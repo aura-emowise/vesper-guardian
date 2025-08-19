@@ -1,8 +1,4 @@
-#### 
-
-
-```javascript
-// 
+// static/app.js - FINAL STABLE BUILD (Frontend)
 
 let isFirstLoad = true;
 
@@ -17,26 +13,48 @@ function logManualEvent(message) {
 }
 
 function updateDashboard() {
-    fetch('/data').then(response => response.json()).then(data => {
-        const { analysis, vitals, patient_info, log } = data; // 
+    fetch('/data')
+    .then(response => response.json())
+    .then(data => {
+        const { analysis, vitals, patient_info, log } = data;
+
+        // 
         const card = document.getElementById('status-card');
         document.getElementById('status-text').textContent = analysis.status;
         document.getElementById('index-value').textContent = `${analysis.index.toFixed(1)} / 10.0`;
         document.getElementById('progress-bar').style.width = `${analysis.index * 10}%`;
         card.className = 'card';
         const acknowledgeButton = document.getElementById('acknowledge-button');
-        if (analysis.status === 'Unease') { card.classList.add('unease'); acknowledgeButton.style.display = 'inline-block'; } 
-        else if (analysis.status === 'Distress Alert!') { card.classList.add('distress'); acknowledgeButton.style.display = 'inline-block'; } 
-        else { card.classList.add('calm'); acknowledgeButton.style.display = 'none'; }
+
+        if (analysis.status === 'Unease') {
+            card.classList.add('unease');
+            acknowledgeButton.style.display = 'inline-block';
+        } else if (analysis.status === 'Distress Alert!') {
+            card.classList.add('distress');
+            acknowledgeButton.style.display = 'inline-block';
+        } else {
+            card.classList.add('calm');
+            acknowledgeButton.style.display = 'none';
+        }
+
+        // 
         document.getElementById('hr-value').textContent = `${vitals.hr.toFixed(1)} bpm`;
         document.getElementById('eda-value').textContent = `${vitals.eda.toFixed(2)} µS`;
         document.getElementById('bp-value').textContent = `${vitals.bp} mmHg`;
+
+        // 
         const logList = document.getElementById('log-list');
         logList.innerHTML = '';
-        log.forEach(event => { const li = document.createElement('li'); li.className = `log-${event.type}`; li.innerHTML = `<span>${event.timestamp}</span> - ${event.message}`; logList.appendChild(li); });
+        if (log && log.length > 0) {
+            log.forEach(event => {
+                const li = document.createElement('li');
+                li.className = `log-${event.type}`;
+                li.innerHTML = `<span>${event.timestamp}</span> - ${event.message}`;
+                logList.appendChild(li);
+            });
+        }
         
         // 
-        
         if (isFirstLoad) {
             document.getElementById('patient-name').textContent = patient_info.name;
             document.getElementById('patient-yob').textContent = patient_info.year_of_birth;
@@ -45,8 +63,13 @@ function updateDashboard() {
             document.getElementById('patient-anamnesis').textContent = patient_info.anamnesis;
             isFirstLoad = false;
         }
-    }).catch(error => console.error('Error fetching data:', error));
+    }).catch(error => {
+        // 
+        console.error('CRITICAL: Failed to fetch or process dashboard data!', error);
+    });
 }
 
+// 
 setInterval(updateDashboard, 3000);
+// 
 window.onload = updateDashboard;

@@ -1,15 +1,13 @@
-# Vesper: Your Silent Guardian - v4.1 (Syntax FIX)
+# Vesper: Your Silent Guardian - FINAL STABLE BUILD (Backend)
 import random
 import collections
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime
-import time
 
 # ---  ---
 PATIENT_INFO = {"name": "John Doe", "year_of_birth": 1957, "height_cm": 182, "weight_kg": 115, "anamnesis": "Diabetes II, Appendectomy (2010)"}
 event_log = collections.deque(maxlen=15)
 last_status = ""
-index_history = collections.deque(maxlen=60)
 
 class SensorSimulator:
     def __init__(self):
@@ -46,6 +44,19 @@ app = Flask(__name__)
 sensor = SensorSimulator()
 vesper_ai = VesperCoreAI()
 
+# ---  ---
+def pre_calibrate_ai():
+    print("Pre-calibrating AI with baseline data...")
+    for _ in range(30):
+        # 
+        calm_reading = {"hr": 70 + random.uniform(-2, 2), "eda": 0.5 + random.uniform(-0.05, 0.05)}
+        vesper_ai.history.append(calm_reading)
+    vesper_ai.establish_baseline()
+    print(f"Calibration complete. Baseline HR: {vesper_ai.baseline_hr:.2f}, EDA: {vesper_ai.baseline_eda:.2f}")
+
+pre_calibrate_ai()
+# ---  ---
+
 def log_event(message, event_type='system'):
     timestamp = datetime.now().strftime("%I:%M:%S %p")
     event_log.appendleft({"timestamp": timestamp, "message": message, "type": event_type})
@@ -71,19 +82,16 @@ def data():
     analysis = vesper_ai.analyze(reading)
     
     current_status = analysis['status']
-    if current_status != last_status and "Calibrating" not in current_status:
+    if current_status != last_status:
         log_event(f"Status changed to {current_status}", 'ai')
         last_status = current_status
-    
-    index_history.append(analysis['index'])
     
     response_data = {
         "analysis": analysis,
         "vitals": reading,
         "patient_info": PATIENT_INFO,
-        "log": list(event_log),
-        "history": list(index_history)
-    } # 
+        "log": list(event_log)
+    }
     return jsonify(response_data)
 
 if __name__ == "__main__":
