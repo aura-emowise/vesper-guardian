@@ -10,13 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!--  -->
     <canvas id="matrix-canvas"></canvas>
 
     <div class="dashboard-grid">
         <!--  -->
-        <div class="column">
-            <!--  -->
+        <div class="patient-column">
             <div class="info-card">
                 <h3>Patient Data</h3>
                 <ul class="patient-data-list">
@@ -27,7 +25,6 @@
                     <li><strong>Anamnesis:</strong> <span id="patient-anamnesis">...</span></li>
                 </ul>
             </div>
-            <!--  -->
             <div class="info-card vitals-card">
                 <h3>Live Vitals</h3>
                 <div class="vitals-grid">
@@ -38,8 +35,8 @@
             </div>
         </div>
 
-        <!--  -->
-        <div class="column">
+      
+        <div class="main-column">
             <div class="card" id="status-card">
                 <div class="header"><h1>Vesper</h1><p>Your Silent Guardian</p></div>
                 <div class="status-display"><h2 id="status-text">Calibrating...</h2><p>Well-being Index</p></div>
@@ -48,8 +45,8 @@
             </div>
         </div>
         
-        <!--  -->
-        <div class="column">
+       
+        <div class="log-column">
             <div class="event-log-container">
                 <h3>Recent Events</h3>
                 <ul id="log-list"></ul>
@@ -57,8 +54,8 @@
         </div>
     </div>
 
+
     <script>
-        // ---  ---
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -69,32 +66,26 @@
         const columns = canvas.width / fontSize;
         const drops = [];
         for (let x = 0; x < columns; x++) drops[x] = 1;
-
         function drawMatrix() {
             ctx.fillStyle = 'rgba(18, 18, 18, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0F0'; // Green text
+            ctx.fillStyle = '#0F0';
             ctx.font = fontSize + 'px Share Tech Mono';
             for (let i = 0; i < drops.length; i++) {
                 const text = charactersArray[Math.floor(Math.random() * charactersArray.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
         }
         setInterval(drawMatrix, 50);
 
-        // ---  ---
         let isFirstLoad = true;
         function updateDashboard() {
             fetch('/data')
                 .then(response => response.json())
                 .then(data => {
                     const { analysis, vitals, patient_info, log } = data;
-                    
-                    // ---  ---
                     const card = document.getElementById('status-card');
                     document.getElementById('status-text').textContent = analysis.status;
                     document.getElementById('index-value').textContent = `${analysis.index.toFixed(1)} / 10.0`;
@@ -103,22 +94,12 @@
                     if (analysis.status === 'Unease') card.classList.add('unease');
                     else if (analysis.status === 'Distress Alert!') card.classList.add('distress');
                     else card.classList.add('calm');
-
-                    // ---  ---
                     document.getElementById('hr-value').textContent = vitals.hr.toFixed(1);
                     document.getElementById('eda-value').textContent = vitals.eda.toFixed(2);
                     document.getElementById('bp-value').textContent = vitals.bp;
-
-                    // ---  ---
                     const logList = document.getElementById('log-list');
                     logList.innerHTML = '';
-                    log.forEach(event => {
-                        const li = document.createElement('li');
-                        li.textContent = event;
-                        logList.appendChild(li);
-                    });
-                    
-                    // ---  ---
+                    log.forEach(event => { const li = document.createElement('li'); li.textContent = event; logList.appendChild(li); });
                     if (isFirstLoad) {
                         document.getElementById('patient-name').textContent = patient_info.name;
                         document.getElementById('patient-yob').textContent = patient_info.year_of_birth;
@@ -130,7 +111,7 @@
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
-        setInterval(updateDashboard, 2000); // 
+        setInterval(updateDashboard, 2000);
         window.onload = updateDashboard;
     </script>
 </body>

@@ -1,49 +1,60 @@
+
 body {
     font-family: 'Roboto', sans-serif;
-    display: flex;
+    display: flex; 
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
     background-color: #121212;
     color: #e0e0e0;
-    overflow: hidden; 
-}
+    overflow: hidden;
+    font-size: 16px; 
 
 
 #matrix-canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; 
-    opacity: 0.3; 
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    opacity: 0.3;
+}
 
 
 .dashboard-grid {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;  
-    gap: 30px; 
-    width: 100%;
-    padding: 20px;
+    display: grid; 
+    grid-template-columns: 1fr 1.5fr 1fr; 
+    gap: 40px; 
+    width: 95vw; 
+    max-width: 1600px; 
+    height: 90vh; 
+    align-items: center; 
 }
 
-.column {
+
+.patient-column, .main-column, .log-column {
     display: flex;
     flex-direction: column;
-    gap: 25px; 
+    gap: 30px; 
+    height: 100%; 
+    justify-content: center; 
+}
+
+
+.card, .info-card, .event-log-container {
+    background-color: rgba(30, 30, 30, 0.85); 
+    border-radius: 15px;
+    padding: 25px 30px;
+    backdrop-filter: blur(8px);
+    border: 1px solid #333;
+    width: 100%; 
+    box-sizing: border-box; 
+}
 
 
 .card {
-    background-color: #1e1e1e;
-    border-radius: 15px;
-    padding: 30px 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    width: 350px;
     text-align: center;
-    border-left: 5px solid #4CAF50;
+    border-left: 7px solid #4CAF50;
     transition: all 0.5s ease;
 }
 .card.calm { border-left-color: #4CAF50; }
@@ -52,47 +63,29 @@ body {
     border-left-color: #F44336;
     animation: pulse 1.5s infinite;
 }
-.header h1 { margin: 0; font-size: 3em; font-weight: 700; }
-.header p { margin: 0 0 30px 0; font-size: 1em; font-weight: 300; color: #aaa; }
-.status-display h2 { font-size: 2.2em; margin: 10px 0 5px 0; font-weight: 400; }
-.status-display p { font-size: 0.9em; color: #aaa; margin: 0 0 20px 0; }
-.progress-container { background-color: #333; border-radius: 10px; height: 20px; width: 100%; overflow: hidden; }
-.progress-bar { background-color: #4CAF50; height: 100%; width: 0%; border-radius: 10px; transition: width 0.5s ease-out; }
-.card.unease .progress-bar { background-color: #FFC107; }
-.card.distress .progress-bar { background-color: #F44336; }
-.index-value { margin-top: 10px; font-weight: 300; font-size: 1em; }
+.header h1 { margin: 0; font-size: 4em; font-weight: 700; }
+.header p { margin: 0 0 30px 0; font-size: 1.2em; color: #aaa; }
+.status-display h2 { font-size: 2.8em; margin: 15px 0 5px 0; }
+.status-display p { font-size: 1.1em; color: #aaa; margin: 0 0 25px 0; }
+.progress-container { height: 25px; }
+.index-value { margin-top: 15px; font-size: 1.2em; }
 @keyframes pulse {
     50% { transform: scale(1.02); box-shadow: 0 10px 40px rgba(244, 67, 54, 0.4); }
 }
 
 
-.info-card {
-    background-color: rgba(30, 30, 30, 0.8); 
-    border-radius: 15px;
-    padding: 20px 25px;
-    width: 300px;
-    backdrop-filter: blur(5px); 
-    border: 1px solid #333;
-}
-.info-card h3 { margin: 0 0 15px 0; color: #aaa; font-weight: 400; text-align: center; }
-.patient-data-list { list-style: none; padding: 0; margin: 0; font-size: 0.9em; }
-.patient-data-list li { padding: 4px 0; }
-.patient-data-list span { color: #fff; }
-
-.vitals-grid { display: grid; grid-template-columns: 1fr; gap: 10px; text-align: center; font-size: 1.2em; font-family: 'Share Tech Mono', monospace;}
-.vital-item { background-color: #222; padding: 10px; border-radius: 8px; }
-
+.info-card h3 { margin: 0 0 20px 0; font-size: 1.5em; color: #aaa; font-weight: 400; text-align: center; }
+.patient-data-list { font-size: 1.1em; list-style-position: inside; }
+.patient-data-list li { padding: 8px 0; }
+.vitals-grid { display: grid; grid-template-columns: 1fr; gap: 15px; text-align: center; font-size: 1.5em; font-family: 'Share Tech Mono', monospace; }
+.vital-item { background-color: #222; padding: 15px; border-radius: 8px; }
 
 .event-log-container {
-    background-color: rgba(30, 30, 30, 0.8);
-    border-radius: 15px;
-    padding: 20px 25px;
-    width: 300px;
-    height: 412px; 
-    backdrop-filter: blur(5px);
-    border: 1px solid #333;
+    height: 100%; 
+    display: flex;
+    flex-direction: column;
 }
-.event-log-container h3 { margin: 0 0 15px 0; color: #aaa; font-weight: 400; text-align: center; }
-.event-log-container ul { list-style: none; padding: 0; margin: 0; font-size: 0.9em; color: #ccc; height: 90%; overflow-y: auto; }
-.event-log-container li { padding: 5px 0; border-bottom: 1px solid #333; font-family: 'Share Tech Mono', monospace; }
+.event-log-container h3 { margin: 0 0 20px 0; font-size: 1.5em; color: #aaa; font-weight: 400; text-align: center; }
+.event-log-container ul { flex-grow: 1; overflow-y: auto; list-style: none; padding: 0; margin: 0; font-size: 1em; font-family: 'Share Tech Mono', monospace;}
+.event-log-container li { padding: 8px 0; border-bottom: 1px solid #333; }
 .event-log-container li:last-child { border-bottom: none; }
