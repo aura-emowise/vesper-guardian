@@ -1,56 +1,25 @@
+/* Vesper Guardian - Final CSS Styles v5.0 */
 
 body {
     font-family: 'Roboto', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #121212;
-    color: #e0e0e0;
-    overflow: hidden;
-    font-size: 16px;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; margin: 0; background-color: #121212; color: #e0e0e0;
+    overflow: hidden; font-size: 16px;
 }
-
-//
 #matrix-canvas {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: -1;
-    opacity: 0.3;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3;
 }
-
-//
 .dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr 1fr;
-    gap: 40px;
-    width: 95vw;
-    max-width: 1600px;
-    height: 90vh;
-    align-items: center;
+    display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 40px;
+    width: 95vw; max-width: 1600px; height: 90vh; align-items: center;
 }
-
-//
 .patient-column, .main-column, .log-column {
-    display: flex; flex-direction: column;
-    gap: 30px;
-    height: 100%;
-    justify-content: center;
+    display: flex; flex-direction: column; gap: 30px; height: 100%; justify-content: center;
 }
-
-//
 .card, .info-card, .event-log-container {
-    background-color: rgba(30, 30, 30, 0.85);
-    border-radius: 15px;
-    padding: 25px 30px;
-    backdrop-filter: blur(8px);
-    border: 1px solid #333;
-    width: 100%;
-    box-sizing: border-box;
+    background-color: rgba(30, 30, 30, 0.85); border-radius: 15px; padding: 25px 30px;
+    backdrop-filter: blur(8px); border: 1px solid #333; width: 100%; box-sizing: border-box;
 }
-
-//
 .card {
     text-align: center; border-left: 7px solid #4CAF50; transition: all 0.5s ease;
 }
@@ -67,24 +36,17 @@ body {
 .card.distress .progress-bar { background-color: #F44336; }
 .index-value { margin-top: 15px; font-size: 1.2em; }
 @keyframes pulse { 50% { transform: scale(1.02); box-shadow: 0 10px 40px rgba(244, 67, 54, 0.4); } }
-
-//
 .info-card h3 { margin: 0 0 20px 0; font-size: 1.5em; color: #aaa; font-weight: 400; text-align: center; }
 .patient-data-list { font-size: 1.1em; list-style: none; padding: 0; }
 .patient-data-list li { padding: 8px 0; }
 .vitals-grid { display: grid; grid-template-columns: 1fr; gap: 15px; text-align: center; font-size: 1.5em; font-family: 'Share Tech Mono', monospace; }
 .vital-item { background-color: #222; padding: 15px; border-radius: 8px; }
-
-//
 .event-log-container { height: 100%; display: flex; flex-direction: column; }
 .event-log-container h3 { margin: 0 0 20px 0; font-size: 1.5em; color: #aaa; font-weight: 400; text-align: center; }
 .event-log-container ul { flex-grow: 1; overflow-y: auto; list-style: none; padding: 0; margin: 0; font-size: 1em; font-family: 'Share Tech Mono', monospace;}
 .event-log-container li { padding: 8px 10px; border-bottom: 1px solid #333; }
-.event-log-container li:last-child { border-bottom: none; }
 .log-manual { color: #3498db; } .log-ai { color: #f1c40f; } .log-system { color: #7f8c8d; }
 .log-list li span { color: #666; margin-right: 10px; }
-
-//
 .controls { margin-top: 25px; display: flex; justify-content: center; gap: 15px; }
 .controls button { background-color: #333; color: #eee; border: 1px solid #555; border-radius: 8px; padding: 10px 20px; font-size: 1em; cursor: pointer; transition: background-color 0.3s; }
 .controls button:hover { background-color: #444; }
