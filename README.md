@@ -4,7 +4,7 @@
 
 **A Medi-Hacks submission to bridge the communication gap in caregiving through an AI-powered non-verbal distress monitor.**
 
-![Vesper Dashboard Screenshot](https://i.imgur.com/r6s8y5H.png)
+![Vesper Dashboard Screenshot](vesper.png)
 *(Note: This is a placeholder image. You should take a screenshot of your final, working application and replace the URL)*
 
 ### Live Demo
