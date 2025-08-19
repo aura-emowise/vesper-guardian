@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vesper Guardian - Live Status</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="card" id="status-card">
+        <div class="header">
+            <h1>Vesper</h1>
+            <p>Your Silent Guardian</p>
+        </div>
+        <div class="status-display">
+            <h2 id="status-text">Calibrating...</h2>
+            <p>Well-being Index</p>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <p class="index-value" id="index-value">0.0 / 10.0</p>
+    </div>
+
+    <script>
+        function updateStatus() {
+            // Fetch new data from our backend API
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    // Get elements from the page
+                    const card = document.getElementById('status-card');
+                    const statusText = document.getElementById('status-text');
+                    const progressBar = document.getElementById('progress-bar');
+                    const indexValue = document.getElementById('index-value');
+
+                    // Update text content
+                    statusText.textContent = data.status;
+                    indexValue.textContent = `${data.index.toFixed(1)} / 10.0`;
+
+                    // Update progress bar width
+                    progressBar.style.width = `${data.index * 10}%`;
+
+                    // Update card color based on status
+                    card.className = 'card'; // Reset classes
+                    if (data.status === 'Unease') {
+                        card.classList.add('unease');
+                    } else if (data.status === 'Distress Alert!') {
+                        card.classList.add('distress');
+                    } else {
+                         card.classList.add('calm');
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Run the update function every 3 seconds
+        setInterval(updateStatus, 3000);
+        // And run it once immediately on page load
+        window.onload = updateStatus;
+    </script>
+</body>
+</html>
