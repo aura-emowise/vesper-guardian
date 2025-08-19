@@ -1,4 +1,4 @@
-/* Vesper Guardian - Final Stable CSS v6.0 */
+/* Vesper Guardian - Final Stable CSS v6.1 (Layout Conflict Fixed) */
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -6,26 +6,24 @@ body {
     height: 100vh; margin: 0; background-color: #121212; color: #e0e0e0;
     overflow: hidden; font-size: 16px;
 }
-//
 .main-content-wrapper {
     position: relative; z-index: 1;
     width: 95vw; max-width: 1600px; height: 90vh;
 }
 .dashboard-grid {
     display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 40px;
-    width: 100%; height: 100%; align-items: center;
+    width: 100%; height: 100%;
+    //
 }
 .patient-column, .main-column, .log-column {
     display: flex; flex-direction: column; gap: 30px; height: 100%; justify-content: center;
 }
 .card, .info-card, .event-log-container {
-    background-color: #1e1e1e; /* ИЗМЕНЕНО: Непрозрачный фон */
+    background-color: #1e1e1e;
     border-radius: 15px; padding: 25px 30px;
     border: 1px solid #333; width: 100%; box-sizing: border-box;
 }
-.card {
-    text-align: center; border-left: 7px solid #4CAF50; transition: all 0.5s ease;
-}
+.card { text-align: center; border-left: 7px solid #4CAF50; transition: all 0.5s ease; }
 .card.calm { border-left-color: #4CAF50; }
 .card.unease { border-left-color: #FFC107; }
 .card.distress { border-left-color: #F44336; animation: pulse 1.5s infinite; }
