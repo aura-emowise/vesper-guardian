@@ -1,4 +1,4 @@
-/* Vesper Guardian - Final Stable CSS v6.1 (Layout Conflict Fixed) */
+/* Vesper Guardian - FINAL STABLE BUILD CSS */
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -6,24 +6,33 @@ body {
     height: 100vh; margin: 0; background-color: #121212; color: #e0e0e0;
     overflow: hidden; font-size: 16px;
 }
-.main-content-wrapper {
-    position: relative; z-index: 1;
-    width: 95vw; max-width: 1600px; height: 90vh;
-}
+
 .dashboard-grid {
-    display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 40px;
-    width: 100%; height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 40px;
+    width: 95vw; max-width: 1600px;
+}
+
+.patient-column, .main-column, .log-column {
+    display: flex; flex-direction: column;
+    gap: 30px;
     //
 }
-.patient-column, .main-column, .log-column {
-    display: flex; flex-direction: column; gap: 30px; height: 100%; justify-content: center;
+
+//
+.main-column {
+    justify-content: center;
 }
+
 .card, .info-card, .event-log-container {
     background-color: #1e1e1e;
     border-radius: 15px; padding: 25px 30px;
     border: 1px solid #333; width: 100%; box-sizing: border-box;
 }
-.card { text-align: center; border-left: 7px solid #4CAF50; transition: all 0.5s ease; }
+.card {
+    text-align: center; border-left: 7px solid #4CAF50; transition: all 0.5s ease;
+}
 .card.calm { border-left-color: #4CAF50; }
 .card.unease { border-left-color: #FFC107; }
 .card.distress { border-left-color: #F44336; animation: pulse 1.5s infinite; }
@@ -36,13 +45,18 @@ body {
 .card.unease .progress-bar { background-color: #FFC107; }
 .card.distress .progress-bar { background-color: #F44336; }
 .index-value { margin-top: 15px; font-size: 1.2em; }
-@keyframes pulse { 50% { transform: scale(1.02); box-shadow: 0 10px 40px rgba(244, 67, 54, 0.4); } }
+@keyframes pulse { 50% { transform: scale(1.02); } }
 .info-card h3 { margin: 0 0 20px 0; font-size: 1.5em; color: #aaa; font-weight: 400; text-align: center; }
 .patient-data-list { font-size: 1.1em; list-style: none; padding: 0; }
 .patient-data-list li { padding: 8px 0; }
 .vitals-grid { display: grid; grid-template-columns: 1fr; gap: 15px; text-align: center; font-size: 1.5em; font-family: 'Share Tech Mono', monospace; }
 .vital-item { background-color: #222; padding: 15px; border-radius: 8px; }
-.event-log-container { height: 100%; display: flex; flex-direction: column; }
+
+//
+.event-log-container {
+    min-height: 400px; //
+    display: flex; flex-direction: column;
+}
 .event-log-container h3 { margin: 0 0 20px 0; font-size: 1.5em; color: #aaa; font-weight: 400; text-align: center; }
 .event-log-container ul { flex-grow: 1; overflow-y: auto; list-style: none; padding: 0; margin: 0; font-size: 1em; font-family: 'Share Tech Mono', monospace;}
 .event-log-container li { padding: 8px 10px; border-bottom: 1px solid #333; }
@@ -53,8 +67,6 @@ body {
 .controls button:hover { background-color: #444; }
 #acknowledge-button { background-color: #b33939; display: none; }
 #acknowledge-button:hover { background-color: #c74747; }
-.trend-chart-card { padding: 20px; }
-.trend-chart-card h3 { text-align: center; margin: 0 0 15px 0; color: #aaa; font-weight: 400; }
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 .modal-overlay.visible { opacity: 1; pointer-events: auto; }
 .modal-content { background: #1e1e1e; padding: 30px; border-radius: 15px; text-align: center; transform: scale(0.9); transition: transform 0.3s ease; }
