@@ -10,7 +10,6 @@ PATIENT_INFO = {
     "year_of_birth": 1957,
     "height_cm": 182,
     "weight_kg": 115,
-    "bloodtype": I(0) Rh+,
     "anamnesis": "Diabetes II, Appendectomy (2010)"
 }
 
