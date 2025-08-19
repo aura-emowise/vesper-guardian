@@ -3,62 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vesper Guardian - Live Status</title>
+    <title>Vesper Guardian - Live Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="main-container">
-        <div class="card" id="status-card">
-            <div class="header"><h1>Vesper</h1><p>Your Silent Guardian</p></div>
-            <div class="status-display"><h2 id="status-text">Calibrating...</h2><p>Well-being Index</p></div>
-            <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
-            <p class="index-value" id="index-value">0.0 / 10.0</p>
+    <!--  -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="dashboard-grid">
+        <!--  -->
+        <div class="column">
+            <!--  -->
+            <div class="info-card">
+                <h3>Patient Data</h3>
+                <ul class="patient-data-list">
+                    <li><strong>Name:</strong> <span id="patient-name">...</span></li>
+                    <li><strong>Born:</strong> <span id="patient-yob">...</span></li>
+                    <li><strong>Height:</strong> <span id="patient-height">...</span> cm</li>
+                    <li><strong>Weight:</strong> <span id="patient-weight">...</span> kg</li>
+                    <li><strong>Anamnesis:</strong> <span id="patient-anamnesis">...</span></li>
+                </ul>
+            </div>
+            <!--  -->
+            <div class="info-card vitals-card">
+                <h3>Live Vitals</h3>
+                <div class="vitals-grid">
+                    <div class="vital-item">❤️ HR: <span id="hr-value">--</span> bpm</div>
+                    <div class="vital-item">⚡ EDA: <span id="eda-value">--</span> µS</div>
+                    <div class="vital-item">🩸 BP: <span id="bp-value">--/--</span> mmHg</div>
+                </div>
+            </div>
+        </div>
+
+        <!--  -->
+        <div class="column">
+            <div class="card" id="status-card">
+                <div class="header"><h1>Vesper</h1><p>Your Silent Guardian</p></div>
+                <div class="status-display"><h2 id="status-text">Calibrating...</h2><p>Well-being Index</p></div>
+                <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+                <p class="index-value" id="index-value">0.0 / 10.0</p>
+            </div>
         </div>
         
-        <!-- НОВЫЙ БЛОК ДЛЯ ЖУРНАЛА -->
-        <div class="event-log-container">
-            <h3>Recent Events</h3>
-            <ul id="log-list">
-                <!--  -->
-            </ul>
+        <!--  -->
+        <div class="column">
+            <div class="event-log-container">
+                <h3>Recent Events</h3>
+                <ul id="log-list"></ul>
+            </div>
         </div>
     </div>
 
     <script>
-        function updateStatus() {
+        // ---  ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const characters = '0123456789';
+        const charactersArray = characters.split('');
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(18, 18, 18, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0F0'; // Green text
+            ctx.font = fontSize + 'px Share Tech Mono';
+            for (let i = 0; i < drops.length; i++) {
+                const text = charactersArray[Math.floor(Math.random() * charactersArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // ---  ---
+        let isFirstLoad = true;
+        function updateDashboard() {
             fetch('/data')
                 .then(response => response.json())
                 .then(data => {
-                    const card = document.getElementById('status-card');
-                    const statusText = document.getElementById('status-text');
-                    const progressBar = document.getElementById('progress-bar');
-                    const indexValue = document.getElementById('index-value');
-                    const logList = document.getElementById('log-list');
-
-                    statusText.textContent = data.status;
-                    indexValue.textContent = `${data.index.toFixed(1)} / 10.0`;
-                    progressBar.style.width = `${data.index * 10}%`;
-
-                    card.className = 'card';
-                    if (data.status === 'Unease') card.classList.add('unease');
-                    else if (data.status === 'Distress Alert!') card.classList.add('distress');
-                    else card.classList.add('calm');
+                    const { analysis, vitals, patient_info, log } = data;
                     
-                    // 
-                    logList.innerHTML = ''; // 
-                    data.log.forEach(event => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = event;
-                        logList.appendChild(listItem);
+                    // ---  ---
+                    const card = document.getElementById('status-card');
+                    document.getElementById('status-text').textContent = analysis.status;
+                    document.getElementById('index-value').textContent = `${analysis.index.toFixed(1)} / 10.0`;
+                    document.getElementById('progress-bar').style.width = `${analysis.index * 10}%`;
+                    card.className = 'card';
+                    if (analysis.status === 'Unease') card.classList.add('unease');
+                    else if (analysis.status === 'Distress Alert!') card.classList.add('distress');
+                    else card.classList.add('calm');
+
+                    // ---  ---
+                    document.getElementById('hr-value').textContent = vitals.hr.toFixed(1);
+                    document.getElementById('eda-value').textContent = vitals.eda.toFixed(2);
+                    document.getElementById('bp-value').textContent = vitals.bp;
+
+                    // ---  ---
+                    const logList = document.getElementById('log-list');
+                    logList.innerHTML = '';
+                    log.forEach(event => {
+                        const li = document.createElement('li');
+                        li.textContent = event;
+                        logList.appendChild(li);
                     });
+                    
+                    // ---  ---
+                    if (isFirstLoad) {
+                        document.getElementById('patient-name').textContent = patient_info.name;
+                        document.getElementById('patient-yob').textContent = patient_info.year_of_birth;
+                        document.getElementById('patient-height').textContent = patient_info.height_cm;
+                        document.getElementById('patient-weight').textContent = patient_info.weight_kg;
+                        document.getElementById('patient-anamnesis').textContent = patient_info.anamnesis;
+                        isFirstLoad = false;
+                    }
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
-        setInterval(updateStatus, 3000);
-        window.onload = updateStatus;
+        setInterval(updateDashboard, 2000); // 
+        window.onload = updateDashboard;
     </script>
 </body>
 </html>

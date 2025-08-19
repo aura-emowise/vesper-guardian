@@ -7,7 +7,34 @@ body {
     margin: 0;
     background-color: #121212;
     color: #e0e0e0;
+    overflow: hidden; 
 }
+
+
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; 
+    opacity: 0.3; 
+
+
+.dashboard-grid {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;  
+    gap: 30px; 
+    width: 100%;
+    padding: 20px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; 
+
 
 .card {
     background-color: #1e1e1e;
@@ -16,114 +43,56 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     width: 350px;
     text-align: center;
-    border-left: 5px solid #4CAF50; /* Calm Green */
+    border-left: 5px solid #4CAF50;
     transition: all 0.5s ease;
 }
-
 .card.calm { border-left-color: #4CAF50; }
-.card.unease { border-left-color: #FFC107; } /* Unease Amber */
+.card.unease { border-left-color: #FFC107; }
 .card.distress { 
-    border-left-color: #F44336; /* Distress Red */
+    border-left-color: #F44336;
     animation: pulse 1.5s infinite;
 }
-
-.header h1 {
-    margin: 0;
-    font-size: 3em;
-    font-weight: 700;
-}
-
-.header p {
-    margin: 0;
-    font-size: 1em;
-    font-weight: 300;
-    color: #aaa;
-    margin-bottom: 30px;
-}
-
-.status-display h2 {
-    font-size: 2.2em;
-    margin: 10px 0 5px 0;
-    font-weight: 400;
-}
-
-.status-display p {
-    font-size: 0.9em;
-    color: #aaa;
-    margin: 0 0 20px 0;
-}
-
-.progress-container {
-    background-color: #333;
-    border-radius: 10px;
-    height: 20px;
-    width: 100%;
-    overflow: hidden;
-}
-
-.progress-bar {
-    background-color: #4CAF50;
-    height: 100%;
-    width: 0%; /* Initial width */
-    border-radius: 10px;
-    transition: width 0.5s ease-out;
-}
-
+.header h1 { margin: 0; font-size: 3em; font-weight: 700; }
+.header p { margin: 0 0 30px 0; font-size: 1em; font-weight: 300; color: #aaa; }
+.status-display h2 { font-size: 2.2em; margin: 10px 0 5px 0; font-weight: 400; }
+.status-display p { font-size: 0.9em; color: #aaa; margin: 0 0 20px 0; }
+.progress-container { background-color: #333; border-radius: 10px; height: 20px; width: 100%; overflow: hidden; }
+.progress-bar { background-color: #4CAF50; height: 100%; width: 0%; border-radius: 10px; transition: width 0.5s ease-out; }
 .card.unease .progress-bar { background-color: #FFC107; }
 .card.distress .progress-bar { background-color: #F44336; }
-
-
-.index-value {
-    margin-top: 10px;
-    font-weight: 300;
-    font-size: 1em;
-}
-
+.index-value { margin-top: 10px; font-weight: 300; font-size: 1em; }
 @keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
     50% { transform: scale(1.02); box-shadow: 0 10px 40px rgba(244, 67, 54, 0.4); }
-    100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
 }
 
 
-/* ---  --- */
-.main-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.info-card {
+    background-color: rgba(30, 30, 30, 0.8); 
+    border-radius: 15px;
+    padding: 20px 25px;
+    width: 300px;
+    backdrop-filter: blur(5px); 
+    border: 1px solid #333;
 }
+.info-card h3 { margin: 0 0 15px 0; color: #aaa; font-weight: 400; text-align: center; }
+.patient-data-list { list-style: none; padding: 0; margin: 0; font-size: 0.9em; }
+.patient-data-list li { padding: 4px 0; }
+.patient-data-list span { color: #fff; }
+
+.vitals-grid { display: grid; grid-template-columns: 1fr; gap: 10px; text-align: center; font-size: 1.2em; font-family: 'Share Tech Mono', monospace;}
+.vital-item { background-color: #222; padding: 10px; border-radius: 8px; }
+
 
 .event-log-container {
-    background-color: #1e1e1e;
+    background-color: rgba(30, 30, 30, 0.8);
     border-radius: 15px;
-    padding: 20px 30px;
-    width: 370px; /*  */
-    margin-top: 25px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    padding: 20px 25px;
+    width: 300px;
+    height: 412px; 
+    backdrop-filter: blur(5px);
+    border: 1px solid #333;
 }
-
-.event-log-container h3 {
-    margin: 0 0 15px 0;
-    text-align: center;
-    color: #aaa;
-    font-weight: 400;
-}
-
-.event-log-container ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 0.9em;
-    color: #ccc;
-    height: 150px; /*  */
-    overflow-y: auto; /**/
-}
-
-.event-log-container li {
-    padding: 5px 0;
-    border-bottom: 1px solid #333;
-}
-
-.event-log-container li:last-child {
-    border-bottom: none;
-}
+.event-log-container h3 { margin: 0 0 15px 0; color: #aaa; font-weight: 400; text-align: center; }
+.event-log-container ul { list-style: none; padding: 0; margin: 0; font-size: 0.9em; color: #ccc; height: 90%; overflow-y: auto; }
+.event-log-container li { padding: 5px 0; border-bottom: 1px solid #333; font-family: 'Share Tech Mono', monospace; }
+.event-log-container li:last-child { border-bottom: none; }
