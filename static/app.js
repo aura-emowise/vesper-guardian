@@ -1,6 +1,6 @@
+// static/app.js - Stable Version (Matrix Removed)
 
-// static/app.js - Final Version
-
+// ---  ---
 const chartCtx = document.getElementById('trend-chart').getContext('2d');
 const trendChart = new Chart(chartCtx, {
     type: 'line',
@@ -10,6 +10,7 @@ const trendChart = new Chart(chartCtx, {
 
 let isFirstLoad = true;
 
+// ---  ---
 function toggleModal() { document.getElementById('log-modal').classList.toggle('visible'); }
 
 function logManualEvent(message) {
@@ -49,22 +50,9 @@ function updateDashboard() {
         }
     }).catch(error => console.error('Error fetching data:', error));
 }
+
+// 
 setInterval(updateDashboard, 3000);
 window.onload = updateDashboard;
 
-const canvas = document.getElementById('matrix-canvas'); const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-const characters = '01'; const charactersArray = characters.split('');
-const fontSize = 16; const columns = canvas.width / fontSize;
-const drops = []; for (let x = 0; x < columns; x++) drops[x] = 1;
-function drawMatrix() {
-    ctx.fillStyle = 'rgba(18, 18, 18, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#0F0'; ctx.font = fontSize + 'px Share Tech Mono';
-    for (let i = 0; i < drops.length; i++) {
-        const text = charactersArray[Math.floor(Math.random() * charactersArray.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-    }
-}
-setInterval(drawMatrix, 50);
+// 
