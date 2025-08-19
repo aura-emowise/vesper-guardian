@@ -1,17 +1,15 @@
-# Vesper: Your Silent Guardian - v4.0 (Interactive Dashboard)
+# Vesper: Your Silent Guardian - v4.1 (Syntax FIX)
 import random
 import collections
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime
 import time
 
-
+# ---  ---
 PATIENT_INFO = {"name": "John Doe", "year_of_birth": 1957, "height_cm": 182, "weight_kg": 115, "anamnesis": "Diabetes II, Appendectomy (2010)"}
-event_log = collections.deque(maxlen=15) # Увеличим размер лога
+event_log = collections.deque(maxlen=15)
 last_status = ""
-
-# 
-index_history = collections.deque(maxlen=60) # 
+index_history = collections.deque(maxlen=60)
 
 class SensorSimulator:
     def __init__(self):
@@ -28,7 +26,7 @@ class VesperCoreAI:
     def __init__(self, history_size=30):
         self.history = collections.deque(maxlen=history_size); self.baseline_hr = None; self.baseline_eda = None
     def establish_baseline(self):
-        if len(self.history) < self.history_maxlen: return False
+        if len(self.history) < self.history.maxlen: return False
         self.baseline_hr = sum(r['hr'] for r in self.history) / len(self.history)
         self.baseline_eda = sum(r['eda'] for r in self.history) / len(self.history)
         return True
@@ -43,11 +41,10 @@ class VesperCoreAI:
         elif index >= 7: status = "Distress Alert!"
         return {"status": status, "index": index}
 
-
+# ---  ---
 app = Flask(__name__)
 sensor = SensorSimulator()
 vesper_ai = VesperCoreAI()
-
 
 def log_event(message, event_type='system'):
     timestamp = datetime.now().strftime("%I:%M:%S %p")
@@ -58,7 +55,6 @@ log_event("System Initialized", 'system')
 @app.route("/")
 def index():
     return render_template("index.html")
-
 
 @app.route("/log_manual_event", methods=['POST'])
 def log_manual_event():
@@ -79,7 +75,6 @@ def data():
         log_event(f"Status changed to {current_status}", 'ai')
         last_status = current_status
     
-    
     index_history.append(analysis['index'])
     
     response_data = {
@@ -87,7 +82,8 @@ def data():
         "vitals": reading,
         "patient_info": PATIENT_INFO,
         "log": list(event_log),
-        "history": list(index_history) # 
+        "history": list(index_history)
+    } # 
     return jsonify(response_data)
 
 if __name__ == "__main__":
