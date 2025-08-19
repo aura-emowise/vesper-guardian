@@ -10,57 +10,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="card" id="status-card">
-        <div class="header">
-            <h1>Vesper</h1>
-            <p>Your Silent Guardian</p>
+    <div class="main-container">
+        <div class="card" id="status-card">
+            <div class="header"><h1>Vesper</h1><p>Your Silent Guardian</p></div>
+            <div class="status-display"><h2 id="status-text">Calibrating...</h2><p>Well-being Index</p></div>
+            <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+            <p class="index-value" id="index-value">0.0 / 10.0</p>
         </div>
-        <div class="status-display">
-            <h2 id="status-text">Calibrating...</h2>
-            <p>Well-being Index</p>
+        
+        <!-- НОВЫЙ БЛОК ДЛЯ ЖУРНАЛА -->
+        <div class="event-log-container">
+            <h3>Recent Events</h3>
+            <ul id="log-list">
+                <!--  -->
+            </ul>
         </div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <p class="index-value" id="index-value">0.0 / 10.0</p>
     </div>
 
     <script>
         function updateStatus() {
-            // Fetch new data from our backend API
             fetch('/data')
                 .then(response => response.json())
                 .then(data => {
-                    // Get elements from the page
                     const card = document.getElementById('status-card');
                     const statusText = document.getElementById('status-text');
                     const progressBar = document.getElementById('progress-bar');
                     const indexValue = document.getElementById('index-value');
+                    const logList = document.getElementById('log-list');
 
-                    // Update text content
                     statusText.textContent = data.status;
                     indexValue.textContent = `${data.index.toFixed(1)} / 10.0`;
-
-                    // Update progress bar width
                     progressBar.style.width = `${data.index * 10}%`;
 
-                    // Update card color based on status
-                    card.className = 'card'; // Reset classes
-                    if (data.status === 'Unease') {
-                        card.classList.add('unease');
-                    } else if (data.status === 'Distress Alert!') {
-                        card.classList.add('distress');
-                    } else {
-                         card.classList.add('calm');
-                    }
+                    card.className = 'card';
+                    if (data.status === 'Unease') card.classList.add('unease');
+                    else if (data.status === 'Distress Alert!') card.classList.add('distress');
+                    else card.classList.add('calm');
+                    
+                    // 
+                    logList.innerHTML = ''; // 
+                    data.log.forEach(event => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = event;
+                        logList.appendChild(listItem);
+                    });
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
-
-        // Run the update function every 3 seconds
         setInterval(updateStatus, 3000);
-        // And run it once immediately on page load
         window.onload = updateStatus;
     </script>
 </body>
