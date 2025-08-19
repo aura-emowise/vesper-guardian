@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vesper Guardian - Interactive Dashboard</title>
-    <!-- -->
     <link rel="stylesheet" href="/static/style.css"> 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,69 +11,68 @@
 <body>
     <canvas id="matrix-canvas"></canvas>
 
-    <div id="log-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h3>Log an Event</h3>
-            <p>Add context to the timeline. What happened?</p>
-            <div class="modal-buttons">
-                <button onclick="logManualEvent('Acknowledged Alert')">Acknowledge Alert</button>
-                <button onclick="logManualEvent('Medication Given')">Medication Given</button>
-                <button onclick="logManualEvent('Patient Repositioned')">Patient Repositioned</button>
-                <button onclick="logManualEvent('Family Visit')">Family Visit</button>
-            </div>
-            <button class="close-button" onclick="toggleModal()">Close</button>
-        </div>
-    </div>
-
     <!--  -->
-    <div class="dashboard-grid">
-        <div class="patient-column">
-            <div class="info-card">
-                <h3>Patient Data</h3>
-                <ul class="patient-data-list">
-                    <li><strong>Name:</strong> <span id="patient-name">...</span></li>
-                    <li><strong>Born:</strong> <span id="patient-yob">...</span></li>
-                    <li><strong>Height:</strong> <span id="patient-height">...</span> cm</li>
-                    <li><strong>Weight:</strong> <span id="patient-weight">...</span> kg</li>
-                    <li><strong>Anamnesis:</strong> <span id="patient-anamnesis">...</span></li>
-                </ul>
+    <main class="main-content-wrapper">
+        <div id="log-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h3>Log an Event</h3>
+                <p>Add context to the timeline. What happened?</p>
+                <div class="modal-buttons">
+                    <button onclick="logManualEvent('Acknowledged Alert')">Acknowledge Alert</button>
+                    <button onclick="logManualEvent('Medication Given')">Medication Given</button>
+                    <button onclick="logManualEvent('Patient Repositioned')">Patient Repositioned</button>
+                    <button onclick="logManualEvent('Family Visit')">Family Visit</button>
+                </div>
+                <button class="close-button" onclick="toggleModal()">Close</button>
             </div>
-            <div class="info-card vitals-card">
-                <h3>Live Vitals</h3>
-                <div class="vitals-grid">
-                    <div class="vital-item">❤️ HR: <span id="hr-value">--</span></div>
-                    <div class="vital-item">⚡ EDA: <span id="eda-value">--</span></div>
-                    <div class="vital-item">🩸 BP: <span id="bp-value">--/--</span></div>
+        </div>
+    
+        <div class="dashboard-grid">
+            <div class="patient-column">
+                <div class="info-card">
+                    <h3>Patient Data</h3>
+                    <ul class="patient-data-list">
+                        <li><strong>Name:</strong> <span id="patient-name">...</span></li>
+                        <li><strong>Born:</strong> <span id="patient-yob">...</span></li>
+                        <li><strong>Height:</strong> <span id="patient-height">...</span> cm</li>
+                        <li><strong>Weight:</strong> <span id="patient-weight">...</span> kg</li>
+                        <li><strong>Anamnesis:</strong> <span id="patient-anamnesis">...</span></li>
+                    </ul>
+                </div>
+                <div class="info-card vitals-card">
+                    <h3>Live Vitals</h3>
+                    <div class="vitals-grid">
+                        <div class="vital-item">❤️ HR: <span id="hr-value">--</span></div>
+                        <div class="vital-item">⚡ EDA: <span id="eda-value">--</span></div>
+                        <div class="vital-item">🩸 BP: <span id="bp-value">--/--</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-column">
+                <div class="card" id="status-card">
+                    <div class="header"><h1>Vesper</h1><p>Your Silent Guardian</p></div>
+                    <div class="status-display"><h2 id="status-text">Calibrating...</h2><p>Well-being Index</p></div>
+                    <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+                    <p class="index-value" id="index-value">0.0 / 10.0</p>
+                    <div class="controls">
+                        <button id="acknowledge-button" onclick="logManualEvent('Acknowledged Alert')">Acknowledge</button>
+                        <button onclick="toggleModal()">Log Event</button>
+                    </div>
+                </div>
+                <div class="info-card trend-chart-card">
+                    <h3>Index Trend (Last Minute)</h3>
+                    <canvas id="trend-chart"></canvas>
+                </div>
+            </div>
+            <div class="log-column">
+                <div class="event-log-container">
+                    <h3>Recent Events</h3>
+                    <ul id="log-list"></ul>
                 </div>
             </div>
         </div>
+    </main>
 
-        <div class="main-column">
-            <div class="card" id="status-card">
-                <div class="header"><h1>Vesper</h1><p>Your Silent Guardian</p></div>
-                <div class="status-display"><h2 id="status-text">Calibrating...</h2><p>Well-being Index</p></div>
-                <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
-                <p class="index-value" id="index-value">0.0 / 10.0</p>
-                <div class="controls">
-                    <button id="acknowledge-button" onclick="logManualEvent('Acknowledged Alert')">Acknowledge</button>
-                    <button onclick="toggleModal()">Log Event</button>
-                </div>
-            </div>
-            <div class="info-card trend-chart-card">
-                <h3>Index Trend (Last Minute)</h3>
-                <canvas id="trend-chart"></canvas>
-            </div>
-        </div>
-        
-        <div class="log-column">
-            <div class="event-log-container">
-                <h3>Recent Events</h3>
-                <ul id="log-list"></ul>
-            </div>
-        </div>
-    </div>
-
-    <!--  -->
     <script src="/static/app.js"></script>
 </body>
 </html>
