@@ -12,10 +12,9 @@ body {
     font-size: 16px;
 }
 
-
+//
 #matrix-canvas {
-    position: fixed;
-    top: 0; left: 0;
+    position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: -1;
     opacity: 0.3;
@@ -34,8 +33,7 @@ body {
 
 //
 .patient-column, .main-column, .log-column {
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
     gap: 30px;
     height: 100%;
     justify-content: center;
@@ -54,16 +52,11 @@ body {
 
 //
 .card {
-    text-align: center;
-    border-left: 7px solid #4CAF50;
-    transition: all 0.5s ease;
+    text-align: center; border-left: 7px solid #4CAF50; transition: all 0.5s ease;
 }
 .card.calm { border-left-color: #4CAF50; }
 .card.unease { border-left-color: #FFC107; }
-.card.distress { 
-    border-left-color: #F44336;
-    animation: pulse 1.5s infinite;
-}
+.card.distress { border-left-color: #F44336; animation: pulse 1.5s infinite; }
 .header h1 { margin: 0; font-size: 4em; font-weight: 700; }
 .header p { margin: 0 0 30px 0; font-size: 1.2em; color: #aaa; }
 .status-display h2 { font-size: 2.8em; margin: 15px 0 5px 0; }
@@ -88,6 +81,8 @@ body {
 .event-log-container ul { flex-grow: 1; overflow-y: auto; list-style: none; padding: 0; margin: 0; font-size: 1em; font-family: 'Share Tech Mono', monospace;}
 .event-log-container li { padding: 8px 10px; border-bottom: 1px solid #333; }
 .event-log-container li:last-child { border-bottom: none; }
+.log-manual { color: #3498db; } .log-ai { color: #f1c40f; } .log-system { color: #7f8c8d; }
+.log-list li span { color: #666; margin-right: 10px; }
 
 //
 .controls { margin-top: 25px; display: flex; justify-content: center; gap: 15px; }
@@ -95,10 +90,8 @@ body {
 .controls button:hover { background-color: #444; }
 #acknowledge-button { background-color: #b33939; display: none; }
 #acknowledge-button:hover { background-color: #c74747; }
-
 .trend-chart-card { padding: 20px; }
 .trend-chart-card h3 { text-align: center; margin: 0 0 15px 0; color: #aaa; font-weight: 400; }
-
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 .modal-overlay.visible { opacity: 1; pointer-events: auto; }
 .modal-content { background: #1e1e1e; padding: 30px; border-radius: 15px; text-align: center; transform: scale(0.9); transition: transform 0.3s ease; }
@@ -108,8 +101,3 @@ body {
 .modal-buttons button:hover { background-color: #34495e; }
 .close-button { margin-top: 10px; background: none; color: #777; border: 1px solid #777; }
 .close-button:hover { background: #333; }
-
-.log-manual { color: #3498db; }
-.log-ai { color: #f1c40f; }
-.log-system { color: #7f8c8d; }
-.log-list li span { color: #666; margin-right: 10px; }
