@@ -3,17 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vesper Guardian - Live Dashboard</title>
+    <title>Vesper Guardian - Interactive Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <canvas id="matrix-canvas"></canvas>
 
+    <-->
+    <div id="log-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Log an Event</h3>
+            <p>Add context to the timeline. What happened?</p>
+            <div class="modal-buttons">
+                <button onclick="logManualEvent('Acknowledged Alert')">Acknowledge Alert</button>
+                <button onclick="logManualEvent('Medication Given')">Medication Given</button>
+                <button onclick="logManualEvent('Patient Repositioned')">Patient Repositioned</button>
+                <button onclick="logManualEvent('Family Visit')">Family Visit</button>
+            </div>
+            <button class="close-button" onclick="toggleModal()">Close</button>
+        </div>
+    </div>
+
     <div class="dashboard-grid">
-        <!--  -->
         <div class="patient-column">
             <div class="info-card">
                 <h3>Patient Data</h3>
@@ -28,24 +42,36 @@
             <div class="info-card vitals-card">
                 <h3>Live Vitals</h3>
                 <div class="vitals-grid">
-                    <div class="vital-item">❤️ HR: <span id="hr-value">--</span> bpm</div>
-                    <div class="vital-item">⚡ EDA: <span id="eda-value">--</span> µS</div>
-                    <div class="vital-item">🩸 BP: <span id="bp-value">--/--</span> mmHg</div>
+                    <div class="vital-item">❤️ HR: <span id="hr-value">--</span></div>
+                    <div class="vital-item">⚡ EDA: <span id="eda-value">--</span></div>
+                    <div class="vital-item">🩸 BP: <span id="bp-value">--/--</span></div>
                 </div>
             </div>
         </div>
 
-      
         <div class="main-column">
             <div class="card" id="status-card">
                 <div class="header"><h1>Vesper</h1><p>Your Silent Guardian</p></div>
                 <div class="status-display"><h2 id="status-text">Calibrating...</h2><p>Well-being Index</p></div>
                 <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
                 <p class="index-value" id="index-value">0.0 / 10.0</p>
+
+
+                 < -->
+                <div class="controls">
+                    <button id="acknowledge-button" onclick="logManualEvent('Acknowledged Alert')">Acknowledge Alert</button>
+                    <button onclick="toggleModal()">Log Manual Event</button>
+                </div>
+            </div>
+
+
+             < -->
+            <div class="info-card trend-chart-card">
+                <h3>Index Trend (Last Minute)</h3>
+                <canvas id="trend-chart"></canvas>
             </div>
         </div>
         
-       
         <div class="log-column">
             <div class="event-log-container">
                 <h3>Recent Events</h3>
@@ -54,65 +80,6 @@
         </div>
     </div>
 
-
-    <script>
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const characters = '0123456789';
-        const charactersArray = characters.split('');
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = [];
-        for (let x = 0; x < columns; x++) drops[x] = 1;
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(18, 18, 18, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0F0';
-            ctx.font = fontSize + 'px Share Tech Mono';
-            for (let i = 0; i < drops.length; i++) {
-                const text = charactersArray[Math.floor(Math.random() * charactersArray.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
-        }
-        setInterval(drawMatrix, 50);
-
-        let isFirstLoad = true;
-        function updateDashboard() {
-            fetch('/data')
-                .then(response => response.json())
-                .then(data => {
-                    const { analysis, vitals, patient_info, log } = data;
-                    const card = document.getElementById('status-card');
-                    document.getElementById('status-text').textContent = analysis.status;
-                    document.getElementById('index-value').textContent = `${analysis.index.toFixed(1)} / 10.0`;
-                    document.getElementById('progress-bar').style.width = `${analysis.index * 10}%`;
-                    card.className = 'card';
-                    if (analysis.status === 'Unease') card.classList.add('unease');
-                    else if (analysis.status === 'Distress Alert!') card.classList.add('distress');
-                    else card.classList.add('calm');
-                    document.getElementById('hr-value').textContent = vitals.hr.toFixed(1);
-                    document.getElementById('eda-value').textContent = vitals.eda.toFixed(2);
-                    document.getElementById('bp-value').textContent = vitals.bp;
-                    const logList = document.getElementById('log-list');
-                    logList.innerHTML = '';
-                    log.forEach(event => { const li = document.createElement('li'); li.textContent = event; logList.appendChild(li); });
-                    if (isFirstLoad) {
-                        document.getElementById('patient-name').textContent = patient_info.name;
-                        document.getElementById('patient-yob').textContent = patient_info.year_of_birth;
-                        document.getElementById('patient-height').textContent = patient_info.height_cm;
-                        document.getElementById('patient-weight').textContent = patient_info.weight_kg;
-                        document.getElementById('patient-anamnesis').textContent = patient_info.anamnesis;
-                        isFirstLoad = false;
-                    }
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
-        setInterval(updateDashboard, 2000);
-        window.onload = updateDashboard;
-    </script>
+    <script src="/static/app.js"></script> < -->
 </body>
 </html>
