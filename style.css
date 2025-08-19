@@ -1,0 +1,86 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.card {
+    background-color: #1e1e1e;
+    border-radius: 15px;
+    padding: 30px 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 350px;
+    text-align: center;
+    border-left: 5px solid #4CAF50; /* Calm Green */
+    transition: all 0.5s ease;
+}
+
+.card.calm { border-left-color: #4CAF50; }
+.card.unease { border-left-color: #FFC107; } /* Unease Amber */
+.card.distress { 
+    border-left-color: #F44336; /* Distress Red */
+    animation: pulse 1.5s infinite;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 3em;
+    font-weight: 700;
+}
+
+.header p {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 300;
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+.status-display h2 {
+    font-size: 2.2em;
+    margin: 10px 0 5px 0;
+    font-weight: 400;
+}
+
+.status-display p {
+    font-size: 0.9em;
+    color: #aaa;
+    margin: 0 0 20px 0;
+}
+
+.progress-container {
+    background-color: #333;
+    border-radius: 10px;
+    height: 20px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: #4CAF50;
+    height: 100%;
+    width: 0%; /* Initial width */
+    border-radius: 10px;
+    transition: width 0.5s ease-out;
+}
+
+.card.unease .progress-bar { background-color: #FFC107; }
+.card.distress .progress-bar { background-color: #F44336; }
+
+
+.index-value {
+    margin-top: 10px;
+    font-weight: 300;
+    font-size: 1em;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+    50% { transform: scale(1.02); box-shadow: 0 10px 40px rgba(244, 67, 54, 0.4); }
+    100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+}
