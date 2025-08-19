@@ -1,9 +1,10 @@
-# Vesper: Your Silent Guardian - Web Application Prototype v2.0
+# Vesper: Your Silent Guardian - Web Application Prototype v2.1 (FIXED)
 # Enhanced with a proper UI and live updates.
 
 import random
 import collections
-# from flask import Flask, Response, render_template, jsonify
+# 
+from flask import Flask, Response, render_template, jsonify
 
 # ---  ---
 class SensorSimulator:
@@ -28,7 +29,7 @@ class VesperCoreAI:
     def analyze(self, reading):
         self.history.append(reading)
         if not self.baseline_hr and not self.establish_baseline():
-            return {"status": "Calibrating...", "index": 0} # Изменено для красоты
+            return {"status": "Calibrating...", "index": 0}
         hr_deviation = (reading['hr'] - self.baseline_hr) / self.baseline_hr
         eda_deviation = (reading['eda'] - self.baseline_eda) / self.baseline_eda
         wellbeing_index = max(0, min(10, (hr_deviation * 0.4 + eda_deviation * 0.6) * 10))
@@ -36,7 +37,7 @@ class VesperCoreAI:
         if 3 <= wellbeing_index < 7: status = "Unease"
         elif wellbeing_index >= 7: status = "Distress Alert!"
         return {"status": status, "index": wellbeing_index}
-# --- ---
+# -- ---
 
 # 
 app = Flask(__name__)
@@ -44,13 +45,11 @@ sensor = SensorSimulator()
 vesper_ai = VesperCoreAI()
 
 # 
-# 
 @app.route("/")
 def index():
     # 
+    return render_template("index.html")
 
-
-# 
 # 
 @app.route("/data")
 def data():
